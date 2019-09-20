@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+
+declare var ymaps: any;
 
 @Component({
   selector: 'app-yandex-map',
@@ -7,9 +9,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class YandexMapComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
+    this.mapLoad();
+  }
+
+  map;
+
+  mapLoad() {
+    ymaps.load().then(maps => {
+      this.map = new maps.Map('map', {
+          center: [55.661574, 37.573856], // Moskow
+          zoom: 6,
+          controls: ['zoomControl']
+        },
+        {
+          suppressObsoleteBrowserNotifier: true,
+          yandexMapDisablePoiInteractivity: true,
+          suppressMapOpenBlock: true
+        });
+    });
   }
 
 }
