@@ -33,4 +33,6 @@ export class YandexMapComponent implements OnInit {
     });
   }
 
+
+
 }
