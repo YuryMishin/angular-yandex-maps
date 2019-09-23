@@ -1,21 +1,44 @@
 <div class="app-ctn">
   <div class="params-ctn">
     <p-card styleClass="ui-card-shadow">
-      <div class="ui-g ui-fluid">
-        <p-dropdown class="ui-md-2" [options]="types" [formControl]="selectedType" ></p-dropdown>
-        <div class="ui-g-12 ui-md-3">
-          <div class="ui-inputgroup">
-            <input type="text" pInputText placeholder="Longitude">
+      <form [formGroup]="geoObjectForm" (ngSubmit)="create()">
+        <div class="ui-g ui-fluid">
+          <p-dropdown class="ui-md-7" [options]="types" formControlName="type"></p-dropdown>
+
+
+          <div style="display: flex; flex-direction: column; width: 100%">
+            <div>
+              <div class="ui-g-12 ui-">
+                <div class="ui-inputgroup">
+                  <input type="text" formControlName="longitude" pInputText placeholder="Longitude">
+                </div>
+              </div>
+              <div class="ui-g-12 ">
+                <div class="ui-inputgroup">
+                  <input type="text" formControlName="latitude" pInputText placeholder="Latitude">
+                </div>
+              </div>
+            </div>
+
+            <div class="border-top" [style.display]="geoObjectForm.get('type').value.label === 'Point' ? 'none' : ''">
+                <div class="ui-g-12 ">
+                  <div class="ui-inputgroup">
+                    <input type="text" formControlName="longitude_2" pInputText placeholder="Longitude">
+                  </div>
+                </div>
+                <div class="ui-g-12 ">
+                  <div class="ui-inputgroup">
+                    <input type="text" formControlName="latitude_2" pInputText placeholder="Latitude">
+                  </div>
+                </div>
+            </div>
           </div>
+
+
+          <p-button class="ui-md-7" label="Create"></p-button>
         </div>
 
-        <div class="ui-g-12 ui-md-3">
-          <div class="ui-inputgroup">
-            <input type="text" pInputText placeholder="Latitude">
-          </div>
-        </div>
-        <p-button class="ui-md-2" label="Create"></p-button>
-      </div>
+      </form>
     </p-card>
   </div>
   <app-yandex-map style="position: relative; height: 100%; width: 100%;"></app-yandex-map>

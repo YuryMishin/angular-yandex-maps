@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -7,14 +8,29 @@ import {FormBuilder, FormControl} from '@angular/forms';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnInit {
-  constructor() {
+  constructor(private appService: AppService) {
   }
 
-  selectedType = new FormControl('');
+  types = [
+    {label: 'Point', value: 'Point'},
+    {label: 'Curve', value: 'Curve'},
+    {label: 'Line', value: 'Line'}];
 
-  types = [{label: 'Point', value: 'Point'}, {label: 'Curve', value: 'Curve'}, {label: 'Line', value: 'Line'}];
+
+  geoObjectForm: FormGroup = new FormGroup({
+      type: new FormControl(this.types[0]),
+      longitude: new FormControl(),
+      latitude: new FormControl(),
+      longitude_2: new FormControl(),
+      latitude_2: new FormControl(),
+    }
+  );
 
   ngOnInit(): void {
+  }
 
+  create() {
+    const result = this.geoObjectForm.getRawValue();
+    this.appService.setGeoObject(result);
   }
 }

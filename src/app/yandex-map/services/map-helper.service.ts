@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { MathHelperService } from './math-helper.service';
-import { MarkerInfo } from '../../../core/models/air.model';
 
 @Injectable()
 export class MapHelperService {
@@ -67,7 +66,7 @@ export class MapHelperService {
         };
     }
 
-    getPartPointCoordinates(place: MarkerInfo) {
+    getPartPointCoordinates(place) {
         return {
             longitude: place.coords[0],
             latitude: place.coords[1],
