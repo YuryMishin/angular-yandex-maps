@@ -42,7 +42,7 @@ export class YamapService {
     });
   }
 
-  createCityGeoObject(yaMap, name, coords) {
+  createPointGeoObject(yaMap, name, coords) {
     // const iconContentClass = yaMap.templateLayoutFactory.createClass(
     //   '' +
     //   '<div>' +
