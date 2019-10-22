@@ -21,21 +21,16 @@ export class MapHelperService {
         return earthRadius * c;
     }
 
-    getCurveCoordinates(part) {
-        if (!part.iataFrom || !part.iataTo) {
-            return undefined;
-        }
-
+    getCurveCoordinates(coords) {
         const partDetails = {
-            from: this.getPartPointCoordinates(part.iataFrom),
-            to: this.getPartPointCoordinates(part.iataTo),
-            isFlyback: part.isFlyback
+            from: this.getPartPointCoordinates(coords[0]),
+            to: this.getPartPointCoordinates(coords[1]),
         };
 
         const STEP = 0.01,
             coordinates = [];
 
-        const points = this.getCurveBasicPoints(partDetails.from, partDetails.to, partDetails.isFlyback);
+        const points = this.getCurveBasicPoints(partDetails.from, partDetails.to);
 
         const x = [points.start.longitude, points.middle.longitude, points.end.longitude],
             y = [points.start.latitude, points.middle.latitude, points.end.latitude];
@@ -50,12 +45,12 @@ export class MapHelperService {
         return coordinates;
     }
 
-    getCurveBasicPoints(point1, point2, needInversion) {
+    getCurveBasicPoints(point1, point2) {
         const higherPoint = (point1.latitude > point2.latitude) ? point1 : point2;
         const lowerPoint = (point1.latitude > point2.latitude) ? point2 : point1;
 
         const distance = this.getDistance(point1, point2);
-        const curveOffset = needInversion ? (-1) * (distance / 250) : (distance / 250);
+        const curveOffset = (distance / 250);
 
         const middlePoint = this.mathHelper.getOffsetCurveMiddle(lowerPoint, higherPoint, curveOffset);
 

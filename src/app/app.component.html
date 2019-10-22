@@ -20,7 +20,8 @@
               </div>
             </div>
 
-            <div class="border-top" [style.display]="geoObjectForm.get('type').value.label === 'Point' ? 'none' : ''">
+            <div class="border-top"
+                 *ngIf="geoObjectForm.get('type').value !== 'Point' && geoObjectForm.get('type').value !== 'Circle'">
                 <div class="ui-g-12 ">
                   <div class="ui-inputgroup">
                     <input type="text" formControlName="longitude_2" pInputText placeholder="Longitude">

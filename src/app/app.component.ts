@@ -13,12 +13,13 @@ export class AppComponent implements OnInit {
 
   types = [
     {label: 'Point', value: 'Point'},
+    {label: 'Circle', value: 'Circle'},
     {label: 'Curve', value: 'Curve'},
     {label: 'Line', value: 'Line'}];
 
 
   geoObjectForm: FormGroup = new FormGroup({
-      type: new FormControl(this.types[0]),
+      type: new FormControl(this.types[0].label),
       longitude: new FormControl(),
       latitude: new FormControl(),
       longitude_2: new FormControl(),

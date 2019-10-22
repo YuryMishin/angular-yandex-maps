@@ -56,24 +56,35 @@ export class YandexMapComponent implements OnInit {
       [parseInt(data.longitude, 10), parseInt(data.latitude, 10)],
       [parseInt(data.longitude_2, 10), parseInt(data.latitude_2, 10)]
     ];
-    console.log('Coords: ', coords);
     switch (type) {
       case 'Point': {
-        geoObject = this.yamapService.createPointGeoObject(this.map, 'Point22', coords[0]);
+        geoObject = this.yamapService.createPointGeoObject(coords[0]);
         break;
       }
       case 'Line': {
-        geoObject = this.yamapService.createCurveGeoObject(this.map, 'Point22', coords);
+        geoObject = this.yamapService.createCurveGeoObject(coords);
         break;
       }
-      case 'Radius': {
-        geoObject = this.yamapService.createRadiusGeoObject(this.map, coords);
+      case 'Circle': {
+        geoObject = this.yamapService.createRadiusGeoObject(coords[0]);
+        break;
+      }
+      case 'Curve': {
+        geoObject = this.yamapService.createRadiusGeoObject(coords);
         break;
       }
     }
-    // geoObject = this.yamapService.createPointGeoObject(this.mapSource, 'Point22', coords);
     this.map.geoObjects.add(geoObject);
-    const position = this.mapPosHelper.getMapPositions(coords);
+    let position;
+    if (type === 'Point' || type === 'Circle') {
+      this.map.setCenter(coords[0]);
+      this.map.setZoom(8);
+    } else {
+      position = this.mapPosHelper.getMapPositions(coords);
+      this.map.setCenter(position.center);
+      this.map.setZoom(position.zoom);
+    }
+    console.log('POSiTION: '  , position);
   }
 
 

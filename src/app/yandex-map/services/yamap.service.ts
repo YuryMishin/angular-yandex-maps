@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ReplaySubject} from 'rxjs';
-
+import {MapHelperService} from './map-helper.service';
+declare var ymaps: any;
 @Injectable({
   providedIn: 'root'
 })
@@ -9,14 +10,14 @@ export class YamapService {
   private stepsExpandSubject = new ReplaySubject<any>(1);
   public stepsExpandSubject$ = this.stepsExpandSubject.asObservable();
 
-  constructor() {
+  constructor(private mapHelper: MapHelperService) {
   }
 
-  createRadiusGeoObject(point, maps) {
-    const radiusGeoObject = new maps.GeoObject({
+  createRadiusGeoObject(coords) {
+    const radiusGeoObject = new ymaps.GeoObject({
       geometry: {
         type: 'Circle',
-        coordinates: point.coords
+        coordinates: coords
       }
     }, {
       fillColor: '#00C4FB',
@@ -25,52 +26,49 @@ export class YamapService {
       strokeOpacity: 0.8,
       strokeWidth: 1
     });
-    radiusGeoObject.geometry.setRadius(point.radius * 1000); // radius set in metres
+    radiusGeoObject.geometry.setRadius(50 * 1000); // radius set in metres
     return radiusGeoObject;
 
   }
 
-  createCurveGeoObject(yaMap, coords, color) {
-    return new yaMap.GeoObject({
+  createCurveGeoObject(coords) {
+    const curveCoords = this.mapHelper.getCurveCoordinates(coords);
+    return new ymaps.GeoObject({
       geometry: {
         type: 'LineString',
-        coordinates: coords,
+        coordinates: curveCoords,
       },
     }, {
-      strokeColor: color,
+      strokeColor: '#222',
       strokeWidth: 4,
     });
   }
 
-  createPointGeoObject(yaMap, name, coords) {
-    // const iconContentClass = yaMap.templateLayoutFactory.createClass(
-    //   '' +
-    //   '<div>' +
-    //   '   <p style="z-index: 10000; color: white; font-size: 18px; width: 75px;">' +
-    //   '       $[properties.iconContent]' +
-    //   '</p>' +
-    //   '</div>'
-    // );
+  createPointGeoObject(coords) {
+    const iconContentClass = ymaps.templateLayoutFactory.createClass(
+      '' +
+      '<div>' +
+      '   <p style="z-index: 100; font-size: 18px; width: 45px; margin-left: 10px">' +
+      '       $[properties.iconContent]' +
+      '</p>' +
+      '</div>'
+    );
     const icon = '../../../assets/img/icon-map-red.png';
-    return new yaMap.GeoObject({
+    return new ymaps.GeoObject({
       geometry: {
         type: 'Point',
         coordinates: coords,
       },
       properties: {
-        iconContent: 'POINT', // name,
+        iconContent: 'POINT',
       }
     }, {
-      // iconLayout: 'default#imageWithContent',
+      iconLayout: 'default#imageWithContent',
       iconImageHref: icon,
       iconImageSize: [40, 40],
       iconImageOffset: [-20, -40],
-      // iconContentLayout: iconContentClass,
+      iconContentLayout: iconContentClass,
       iconContentOffset: [30, 0]
     });
-  }
-
-  timer(ms) {
-    return new Promise(res => setTimeout(res, ms));
   }
 }
